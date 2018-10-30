@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="profileCustomer.js"></script>
+    
+</head>
+
+<body>
+    <ons-page>
+        <ons-toolbar style="background-color: #FF0000;">
+            <div class="center">Easy Eats</div>
+        </ons-toolbar>
+
+        <ons-tabbar swipeable position="auto">
+            <ons-tab page="home.html" label="Home" icon="ion-home, material:md-home">
+            </ons-tab>
+            <ons-tab page="profile.html" label="Profile" icon="ion-person">
+            </ons-tab>
+            <ons-tab page="feed.html" label="Feed" icon="md-notifications" badge="9">
+            </ons-tab>
+            <ons-tab page="setting.html" label="Setting" icon="md-settings">
+            </ons-tab>
+        </ons-tabbar>
+    </ons-page>
+
+    <template id="home.html">
+        <ons-page id="home">
+            <br><br>
+            <img src="ImgLogo/p.jpg" style="width: 20%; margin-left: 40%;">
+        </ons-page>
+    </template>
+
+    <template id="profile.html">
+        <ons-page id="profile">
+            <ons-page>
+
+                <ons-list>
+                    <ons-list-item>
+                        <div class="left">
+                            <a href="profile.html">
+                                <img class="list-item__thumbnail" src="ImgLogo/bag.jpg">
+                            </a>
+                        </div>
+                        <div class="center">
+                            <span class="list-item__title">BagGy^^</span><span class="list-item__subtitle">095 018 9299</span>
+                        </div>
+                    </ons-list-item>
+                </ons-list>
+                <br />
+
+                <ons-list modifier="inset">
+                    <ons-list-header>ร้านอาหาร</ons-list-header>
+                    <ons-list-item>
+                        <div class="left">
+                            <img class="list-item__thumbnail" src="ImgLogo/gg.jpg">
+                        </div>
+                        <div class="center">
+                            <span class="list-item__title">แหลมหินซีฟู๊ด</span><span class="list-item__subtitle">098
+                                226 2251</span>
+                        </div>
+                    </ons-list-item>
+                    <ons-list-item>
+                        <div class="left">
+                            <img class="list-item__thumbnail" src="ImgLogo/ww.jpg">
+                        </div>
+                        <div class="center">
+                            <span class="list-item__title">สมจิตต์ โภชนา</span><span class="list-item__subtitle">086
+                                161 1029</span>
+                        </div>
+                    </ons-list-item>
+                    <ons-list-item>
+                        <div class="left">
+                            <img class="list-item__thumbnail" src="ImgLogo/pp.jpg">
+                        </div>
+                        <div class="center">
+                            <span class="list-item__title">อุไร ชวนชิม</span><span class="list-item__subtitle">082 820
+                                4572</span>
+                        </div>
+                    </ons-list-item>
+                </ons-list>
+
+                <br />
+            </ons-page>
+        </ons-page>
+    </template>
+
+    <template id="feed.html">
+        <ons-page id="feed">
+
+        </ons-page>
+    </template>
+
+    <template id="setting.html">
+        <ons-page id="setting">
+            <ons-card>
+
+                <ons-input type="file" id="fileInput"></ons-input>
+
+                <div class="regisInput">
+                    <br><br>
+                    <ons-list modifier="inset">
+                        <ul class="list">
+                            <li class="list-item">
+                                <div class="list-item__center">
+                                    <input type="text" id="username" class="text-input" placeholder="Username">
+                                </div>
+                            </li>
+                            <li class="list-item">
+                                <div class="list-item__center">
+                                    <input type="text" id="name" class="text-input" placeholder="Name">
+                                </div>
+                            </li>
+                            <li class="list-item">
+                                <div class="list-item__center">
+                                    <input type="text" id="telephone" class="text-input" placeholder="Telephone">
+                                </div>
+                            </li>
+                            <li class="list-item">
+                                <div class="list-item__center">
+                                    <input type="text" id="address" class="text-input" placeholder="Address">
+                                </div>
+                            </li>
+                        </ul>
+                    </ons-list>
+                </div>
+
+                <section style="padding: 8px; text-align: center;">
+                    <ons-button id="editData" onclick="editData()" style="background-color: #FF0000;">อัพเดทโปรไฟล์</ons-button>&nbsp;&nbsp;
+                    <ons-button style="background-color: #FF0000;">ออกจากระบบ</ons-button>
+                </section>
+            </ons-card>
+
+        </ons-page>
+    </template>
+
+
+    <!--อัพเดทโปรไฟล์  -->
+
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+    <!--Configure firebase-->
+    <script>
+
+        var config = {
+            apiKey: "AIzaSyDIdjjWBFQtvQEPpA80nIWOEnvPhUlSjow",
+            authDomain: "easyeats-c4ea1.firebaseapp.com",
+            databaseURL: "https://easyeats-c4ea1.firebaseio.com",
+            projectId: "easyeats-c4ea1",
+            storageBucket: "easyeats-c4ea1.appspot.com",
+            messagingSenderId: "596097988420"
+        };
+
+        var thumbnail;
+        var searchParams = new URLSearchParams(window.location.search);
+        console.log("QueryString", searchParams.get("id"))
+
+        firebase.initializeApp(config);
+        var database = firebase.database();
+        var dimg;
+        /* List Snapshot */
+        database.ref("profile/").once('child_added', function (snapshot) {
+            if (snapshot.exists()) {
+                var content = '';
+                snapshot.forEach(function (users) {
+                    var val = users.val();
+                    var get_id;
+                    console.log("id", users.getKey());
+                    get_id = users.getKey();
+                    if (get_id == searchParams.get("id")) {
+                        console.log("title", users.title);
+                        console.log("content", users.content);
+                        document.getElementById("username").value = "" + val.username;
+                        document.getElementById("name").value = "" + val.name;
+                        document.getElementById("telephone").value = "" + val.telephone;
+                        document.getElementById("address").value = "" + val.address;
+                        document.getElementById("imgProfile").value = "" + val.imgProfile;
+                        if (document.getElementById("imgProfile").value == "") {
+                            var fileInput = document.getElementById("fileInput");
+                            fileInput.addEventListener('change', function (e) {
+                                var file = e.target.files[0];
+                                var storageRef = firebase.storage().ref(file.name);
+                                storageRef.put(file);
+                                imgProfile = "https://firebasestorage.googleapis.com/v0/b/" + config["storageBucket"] + "/o/" + file.name + "?alt=media";
+                            });
+                        } else {
+                            imgProfile = val.imgProfile;
+                        }
+                    }
+                });
+            }
+        });
+        /* List Snapshot */
+
+        console.log("imgProfile", imgProfile);
+
+        // document.getElementById("editData").onclick = function (e) 
+        function editData() {
+
+            var username = document.getElementById('username').value;
+            var name = document.getElementById('name').value;
+            var telephone = document.getElementById('telephone').value;
+            var address = document.getElementById('address').value;
+            var rootRef = firebase.database().ref();
+            var storesRef = rootRef.child('profile/users/' + searchParams.get("id"));
+            storesRef.set({
+                username: username,
+                name: name,
+                telephone: telephone,
+                address: address,
+                imgProfile: imgProfile
+            });
+            window.location.href = "profile.html";
+        }  
+    </script>
+</body>
+
+<!-- <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
+
+<script>
+    var config = {
+        apiKey: "AIzaSyBSg7jf1RjTjqodGBG0PJaQk8WR9qolWwg",
+        authDomain: "easyeats-39cdf.firebaseapp.com",
+        databaseURL: "https://easyeats-39cdf.firebaseio.com",
+        projectId: "easyeats-39cdf",
+        storageBucket: "easyeats-39cdf.appspot.com",
+        messagingSenderId: "280234311032"
+    };
+    firebase.initializeApp(config);
+
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            var displayName = user.displayName;
+            var email = user.email;
+            var emailVerified = user.emailVerified;
+            var photoURL = user.photoURL;
+            var isAnonymous = user.isAnonymous;
+            var uid = user.uid;
+            var providerData = user.providerData;
+            //window.location.href = 'ProfileCustomer.html';
+            alert(uid);
+
+        } else {
+            // User is signed out.
+            uid = null;
+
+            console.log("no");
+            console.log(uid);
+            window.location.href = "LoginCustomer.html";
+        }
+    });
+</script> -->
+
+</html>

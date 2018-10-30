@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
+</head>
+
+<body>
+    <ons-page>
+        <ons-toolbar style="background-color: #FF0000;">
+            <div class="center">MY PROFILE</div>
+        </ons-toolbar>
+
+        <ons-card id="show-data" style="text-align:center;"></ons-card>
+
+
+        <section style="padding: 8px; text-align: center;">
+            <ons-button style="background-color: #FF0000;">แก้ไขโปรไฟล์</ons-button>&nbsp;&nbsp;
+            <ons-button id="btnLogout" onclick="btnLogout()" style="background-color: #FF0000;">ออกจากระบบ</ons-button>
+        </section>
+
+    </ons-page>
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+
+        var config = {
+            apiKey: "AIzaSyDIdjjWBFQtvQEPpA80nIWOEnvPhUlSjow",
+            authDomain: "easyeats-c4ea1.firebaseapp.com",
+            databaseURL: "https://easyeats-c4ea1.firebaseio.com",
+            projectId: "easyeats-c4ea1",
+            storageBucket: "",
+            messagingSenderId: "596097988420"
+        };
+        firebase.initializeApp(config);
+
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                var mailLogin = user.email;
+                console.log(user.uid);
+                console.log(user.email);
+
+                var database = firebase.database();
+                database.ref("profile/").once('child_added', function (snapshot) {
+                    if (snapshot.exists()) {
+                        var content = '';
+                        snapshot.forEach(function (users) {
+                            var val = users.val();
+                            // console.log("row", users.val());
+                            // console.log("title", users.getKey());
+
+                            if (mailLogin == val.email) {
+
+                                content += '<img style="height:100px;" src=' + val.imgProfile + '><br><br>';
+                                content += '<ons-list>';
+                                content += '<ons-list-item>Username  :  ' + val.username + '</ons-list-item>';
+                                content += '<ons-list-item>Name  :  ' + val.name + '</ons-list-item>';
+                                content += '<ons-list-item>Email  :  ' + val.email + '</ons-list-item>';
+                                content += '<ons-list-item>Telephone  :  ' + val.telephone + '</ons-list-item>';
+                                content += '<ons-list-item>Address  :  ' + val.address + '</ons-list-item>';
+                                content += '</ons-list>';
+                            }
+                        });
+                        var theDiv = document.getElementById("show-data");
+                        theDiv.innerHTML += content;
+                        //$('#show-data').append(content);
+                    }
+                });
+                //alert(mail)
+                // User is signed in.
+            } else {
+                // User is signed out.
+                console.log('not log in');
+            }
+        });
+
+        function btnLogout() {
+            firebase.auth().signOut()
+                .then(result => {
+                    // Sign-out successful.
+                    window.location.href = "loginCustomer.html";
+                })
+                .catch(error => {
+                    // Handle Errors here.
+                    var errorMessage = error.message;
+                });
+        }
+
+    </script>
+</body>
+
+</html>

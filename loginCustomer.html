@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+</head>
+
+<body>
+    <ons-page>
+        <ons-toolbar style="background-color: #ff0000;">
+            <div class="center">LOGIN</div>
+        </ons-toolbar>
+        <ons-card style="text-align: center;">
+            <img src="ImgLogo/logo.png" alt="Onsen UI" style="height:150px;">
+            <div class="regisInput">
+                <ons-list modifier="inset">
+                    <ul class="list">
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="email" id="email" class="text-input" placeholder="Email">
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="password" id="password" class="text-input" placeholder="Password">
+                            </div>
+                        </li>
+
+                    </ul>
+                </ons-list>
+                <br>
+                <ons-button onclick="btnLogin()" id="btnLogin" style="background-color: red; width: 40%;">LOGIN</ons-button>
+            </div>
+        </ons-card>
+    </ons-page>
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDIdjjWBFQtvQEPpA80nIWOEnvPhUlSjow",
+            authDomain: "easyeats-c4ea1.firebaseapp.com",
+            databaseURL: "https://easyeats-c4ea1.firebaseio.com",
+            projectId: "easyeats-c4ea1",
+            storageBucket: "",
+            messagingSenderId: "596097988420"
+        };
+        firebase.initializeApp(config);
+
+        function btnLogin() {
+            email = document.getElementById("email").value
+            password = document.getElementById("password").value
+            firebase.auth().signInWithEmailAndPassword(email, password).then(function (resp) {
+                console.log(resp)
+                ons.notification.alert("Login success!")
+                window.location.href = "profileTest.html";
+                // window.location.href = "testHome.html";
+            }).catch(function (err) {
+                console.log(err)
+                ons.notification.alert(err.message)
+            })
+        }
+    </script>
+</body>
+
+</html>

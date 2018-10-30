@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+</head>
+
+<body>
+    <ons-page>
+        <ons-toolbar style="background-color: #ff0000;">
+            <div class="center">REGISTER</div>
+        </ons-toolbar>
+        <ons-card style="text-align: center;">
+            <img src="ImgLogo/logo.png" alt="Onsen UI" style="height:150px;">
+            <div class="regisInput">
+                <ons-list modifier="inset">
+                    <ul class="list">
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="text" id="username" class="text-input" placeholder="Username">
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="email" id="email" class="text-input" placeholder="Email">
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="password" id="password" class="text-input" placeholder="Password">
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="password" id="cofirmPassword" class="text-input" placeholder="Confirm Password">
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="text" id="name" class="text-input" placeholder="Name">
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="telephone" id="telephone" class="text-input" placeholder="Telephone"
+                                    required>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-item__center">
+                                <input type="text" id="address" class="text-input" placeholder="Address">
+                            </div>
+                        </li>
+                    </ul>
+                </ons-list>
+                <br>
+                <ons-button onclick="btnRegis()" id="btnRegis" style="background-color: red; width: 40%;">REGISTER</ons-button><br>
+
+                <section style="padding: 8px; text-align: center;">
+                    <ons-button modifier="quiet" onclick="btnLogin()" id="btnLogin" style="color:#ff0000;">LOGIN</ons-button>
+                </section>
+            </div>
+        </ons-card>
+    </ons-page>
+
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+    <script>
+
+        var config = {
+            apiKey: "AIzaSyDIdjjWBFQtvQEPpA80nIWOEnvPhUlSjow",
+            authDomain: "easyeats-c4ea1.firebaseapp.com",
+            databaseURL: "https://easyeats-c4ea1.firebaseio.com",
+            projectId: "easyeats-c4ea1",
+            storageBucket: "easyeats-c4ea1.appspot.com",
+            messagingSenderId: "596097988420"
+        };
+
+
+        document.getElementById("btnRegis").onclick = function (e) {
+            var imgProfile = "https://firebasestorage.googleapis.com/v0/b/easyeats-c4ea1.appspot.com/o/pf.jpg?alt=media&token=5b2f306e-215e-4b87-87fc-48d09548f823";
+            var username = document.getElementById("username").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var cofirmPassword = document.getElementById("cofirmPassword").value;
+            var name = document.getElementById("name").value;
+            var telephone = document.getElementById("telephone").value;
+            var address = document.getElementById("address").value;
+            if (email == "") {
+                ons.notification.alert('Please enter email.')
+                return;
+            }
+            else {
+            if (password != cofirmPassword) {
+                ons.notification.alert('Passwords do not match.')
+                return;
+            }
+            else {
+                firebase.initializeApp(config);
+
+                var database = firebase.database();
+
+                var rootRef = firebase.database().ref();
+                var storesRef = rootRef.child('profile/users/');
+                var newStoreRef = storesRef.push();
+                newStoreRef.set({
+                    imgProfile: imgProfile,
+                    username: username,
+                    email: email,
+                    password: password,
+                    cofirmPassword: cofirmPassword,
+                    name: name,
+                    telephone: telephone,
+                    address: address,
+                });
+
+                // if (password.length < 8) {
+                //     ons.notification.alert('Please enter at least 8 characters.')
+                //     return;
+                // }
+
+
+                console.log("Regis Success")
+                firebase.auth().createUserWithEmailAndPassword(email, password).then(function (resp) {
+                    console.log(resp)
+                    ons.notification.alert("User created successfully")
+                    // window.location.href = "loginCustomer.html";
+                }).catch(function (err) {
+                    console.log(err)
+                    ons.notification.alert('Please enter email.')
+                })
+            }
+        }}
+
+        document.getElementById("btnLogin").onclick = function (e) {
+            window.location.href = "loginCustomer.html";
+        }
+
+    </script>
+</body>
+
+</html>
