@@ -8,16 +8,17 @@
     <title>Login</title>
     <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
     <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
     <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
 </head>
 
 <body>
     <ons-page>
         <ons-toolbar style="background-color: #ff0000;">
-            <div class="center">LOGIN</div>
+            <!-- <div class="center" style="font-family: 'Luckiest Guy', cursive; font-size: 40px; color: white;">LOGIN</div> -->
         </ons-toolbar>
-        <ons-card style="text-align: center;">
-            <img src="ImgLogo/logo.png" alt="Onsen UI" style="height:150px;">
+        <ons-card style="text-align: center; height: 100%;">
+            <img src="ImgLogo/logo.png" alt="Onsen UI" style="height:200px;">
             <div class="regisInput">
                 <ons-list modifier="inset">
                     <ul class="list">
@@ -35,7 +36,7 @@
                     </ul>
                 </ons-list>
                 <br>
-                <ons-button onclick="btnLogin()" id="btnLogin" style="background-color: red; width: 40%;">LOGIN</ons-button>
+                <ons-button onclick="btnLogin()" id="btnLogin" style="background-color: red; width: 100%; padding: 14px 28px; font-family: 'Luckiest Guy', cursive; font-size: 30px; padding: 14px 28px;">LOGIN</ons-button>
             </div>
         </ons-card>
     </ons-page>
@@ -59,7 +60,7 @@
             firebase.auth().signInWithEmailAndPassword(email, password).then(function (resp) {
                 console.log(resp)
                 ons.notification.alert("Login success!")
-                window.location.href = "profileTest.html";
+                window.location.href = "profileCustomer.html";
                 // window.location.href = "testHome.html";
             }).catch(function (err) {
                 console.log(err)

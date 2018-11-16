@@ -15,7 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="profileCustomer.js"></script>
-    
+
 </head>
 
 <body>
@@ -49,10 +49,8 @@
 
                 <ons-list>
                     <ons-list-item>
-                        <div class="left">
-                            <a href="profile.html">
-                                <img class="list-item__thumbnail" src="ImgLogo/bag.jpg">
-                            </a>
+                        <div class="left" id="profilePic">
+                            <img class="list-item__thumbnail" src="ImgLogo/bag.jpg">
                         </div>
                         <div class="center">
                             <span class="list-item__title">BagGy^^</span><span class="list-item__subtitle">095 018 9299</span>
@@ -105,41 +103,49 @@
 
     <template id="setting.html">
         <ons-page id="setting">
-            <ons-card>
-
-                <ons-input type="file" id="fileInput"></ons-input>
-
-                <div class="regisInput">
-                    <br><br>
+            <ons-card style="text-align:center;">
+                <div id="show-data" style="text-align:center;"></div>
+                <ons-input type="file" id="imgProfile"></ons-input><br><br>
+    
+                <div class="updateProfile">
                     <ons-list modifier="inset">
                         <ul class="list">
                             <li class="list-item">
                                 <div class="list-item__center">
-                                    <input type="text" id="username" class="text-input" placeholder="Username">
+                                    Username : &nbsp;<input type="text" id="username" class="text-input">
                                 </div>
                             </li>
                             <li class="list-item">
                                 <div class="list-item__center">
-                                    <input type="text" id="name" class="text-input" placeholder="Name">
+                                    Name : &nbsp;<input type="text" id="fname" class="text-input">
                                 </div>
                             </li>
                             <li class="list-item">
                                 <div class="list-item__center">
-                                    <input type="text" id="telephone" class="text-input" placeholder="Telephone">
+                                    Telephone : &nbsp;<input type="telephone" id="telephone" class="text-input">
                                 </div>
                             </li>
                             <li class="list-item">
                                 <div class="list-item__center">
-                                    <input type="text" id="address" class="text-input" placeholder="Address">
+                                    Address : &nbsp;<input type="text" id="address" class="text-input">
+                                </div>
+                            </li>
+                            <li class="list-item">
+                                <div class="list-item__center">
+                                    Email : &nbsp;<input type="email" id="email" class="text-input">
+                                </div>
+                            </li>
+                            <li class="list-item">
+                                <div class="list-item__center">
+                                    Password : &nbsp;<input type="password" id="password" class="text-input">
                                 </div>
                             </li>
                         </ul>
                     </ons-list>
-                </div>
-
+                </div><br>
                 <section style="padding: 8px; text-align: center;">
-                    <ons-button id="editData" onclick="editData()" style="background-color: #FF0000;">อัพเดทโปรไฟล์</ons-button>&nbsp;&nbsp;
-                    <ons-button style="background-color: #FF0000;">ออกจากระบบ</ons-button>
+                    <ons-button id="btnUpdate" onclick="btnUpdate()" style="background-color: #FF0000;">อัพเดทโปรไฟล์</ons-button>&nbsp;&nbsp;
+                    <ons-button id="btnLogout" onclick="btnLogout()" style="background-color: #FF0000;">ออกจากระบบ</ons-button>
                 </section>
             </ons-card>
 
@@ -148,11 +154,9 @@
 
 
     <!--อัพเดทโปรไฟล์  -->
-
-    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-
-    <!--Configure firebase-->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
     <script>
+        // Initialize Firebase
 
         var config = {
             apiKey: "AIzaSyDIdjjWBFQtvQEPpA80nIWOEnvPhUlSjow",
@@ -162,68 +166,98 @@
             storageBucket: "easyeats-c4ea1.appspot.com",
             messagingSenderId: "596097988420"
         };
-
-        var thumbnail;
-        var searchParams = new URLSearchParams(window.location.search);
-        console.log("QueryString", searchParams.get("id"))
-
         firebase.initializeApp(config);
-        var database = firebase.database();
-        var dimg;
-        /* List Snapshot */
-        database.ref("profile/").once('child_added', function (snapshot) {
-            if (snapshot.exists()) {
-                var content = '';
-                snapshot.forEach(function (users) {
-                    var val = users.val();
-                    var get_id;
-                    console.log("id", users.getKey());
-                    get_id = users.getKey();
-                    if (get_id == searchParams.get("id")) {
-                        console.log("title", users.title);
-                        console.log("content", users.content);
-                        document.getElementById("username").value = "" + val.username;
-                        document.getElementById("name").value = "" + val.name;
-                        document.getElementById("telephone").value = "" + val.telephone;
-                        document.getElementById("address").value = "" + val.address;
-                        document.getElementById("imgProfile").value = "" + val.imgProfile;
-                        if (document.getElementById("imgProfile").value == "") {
-                            var fileInput = document.getElementById("fileInput");
-                            fileInput.addEventListener('change', function (e) {
-                                var file = e.target.files[0];
-                                var storageRef = firebase.storage().ref(file.name);
-                                storageRef.put(file);
-                                imgProfile = "https://firebasestorage.googleapis.com/v0/b/" + config["storageBucket"] + "/o/" + file.name + "?alt=media";
-                            });
-                        } else {
-                            imgProfile = val.imgProfile;
-                        }
+
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                var mailLogin = user.email;
+                // console.log(user.uid);
+                console.log(user.email);
+
+                var database = firebase.database();
+                database.ref("profile/").once('child_added', function (snapshot) {
+                    if (snapshot.exists()) {
+                        var content = '';
+                        snapshot.forEach(function (users) {
+                            var childKey = users.key;
+                            var val = users.val();
+                            // console.log("Data", users.val());
+                            // console.log("Key", users.key);
+
+                            if (mailLogin == val.email) {
+
+                                var keyLogin = users.key;
+                                console.log("KeyLogin", keyLogin);
+
+                                content += '<img style="height:120px;" src=' + val.imgProfile + '><br><br>';
+                                document.getElementById("username").value = "" + val.username;
+                                document.getElementById("fname").value = "" + val.fname;
+                                document.getElementById("telephone").value = "" + val.telephone;
+                                document.getElementById("address").value = "" + val.address;
+                                document.getElementById("email").value = "" + val.email;
+                                document.getElementById("password").value = "" + val.password;
+
+                                // <!-- 
+                                //     var fileButton = document.getElementById("imgProfile");
+                                //     fileButton.addEventListener('change', function (e) {
+                                //         var file = e.target.files[0];
+                                //         var storageRef = firebase.storage().ref(file.name);
+                                //         storageRef.put(file);
+                                //     var imgProfile = "https://firebasestorage.googleapis.com/v0/b/" + config["storageBucket"] + "/o/" + file.name + "?alt=media";
+                                //     }); -->
+
+                                document.getElementById("btnUpdate").onclick = function (e) {
+
+                                    var username = document.getElementById('username').value;
+                                    var name = document.getElementById('fname').value;
+                                    var telephone = document.getElementById('telephone').value;
+                                    var address = document.getElementById('address').value;
+                                    var email = document.getElementById('email').value;
+                                    var password = document.getElementById('password').value;
+                                    var rootRef = firebase.database().ref();
+                                    var storesRef = rootRef.child('profile/users/' + keyLogin);
+                                    storesRef.update({
+                                        // imgProfile: imgProfile,
+                                        username: username,
+                                        fname: name,
+                                        telephone: telephone,
+                                        address: address,
+                                        email: email,
+                                        password: password
+                                        //  thumbnail : thumbnail
+                                    });
+
+                                    alert('Update Success')
+                                    window.location.href = "profileCustomer.html";
+                                }
+                            }
+                        });
+                        var theDiv = document.getElementById("show-data");
+                        theDiv.innerHTML += content;
+                        //$('#show-data').append(content);
                     }
                 });
+                //alert(mail)
+                // User is signed in.
+            } else {
+                // User is signed out.
+                console.log('not log in');
             }
         });
-        /* List Snapshot */
 
-        console.log("imgProfile", imgProfile);
+        function btnLogout() {
+            firebase.auth().signOut()
+                .then(result => {
+                    // Sign-out successful.
+                    alert("Logout Success!")
+                    window.location.href = "loginCustomer.html";
+                })
+                .catch(error => {
+                    // Handle Errors here.
+                    var errorMessage = error.message;
+                });
+        }
 
-        // document.getElementById("editData").onclick = function (e) 
-        function editData() {
-
-            var username = document.getElementById('username').value;
-            var name = document.getElementById('name').value;
-            var telephone = document.getElementById('telephone').value;
-            var address = document.getElementById('address').value;
-            var rootRef = firebase.database().ref();
-            var storesRef = rootRef.child('profile/users/' + searchParams.get("id"));
-            storesRef.set({
-                username: username,
-                name: name,
-                telephone: telephone,
-                address: address,
-                imgProfile: imgProfile
-            });
-            window.location.href = "profile.html";
-        }  
     </script>
 </body>
 

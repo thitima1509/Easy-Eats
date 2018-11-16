@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Easy-Eats</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+</head>
+
+<body>
+    <ons-page id="helloworld-page">
+        <ons-toolbar style="background-color: #ff0000;">
+            <div class="center" style="font-family: 'Luckiest Guy', cursive; font-size: 30px; color: white;">Welcome to
+                EASY-EATS</div>
+        </ons-toolbar>
+
+        <ons-card style="text-align: center; height: 100%;">
+            <img src="ImgLogo/logo.png" alt="Onsen UI" style="display: block;
+                margin-top: 15%;
+                height: 250px;">
+            <ons-button id="btnRes" onclick="btnRes()" style="display: block;
+                width: 100%;
+                border: none;
+                color: white;
+                background-color: #FF0000;
+                padding: 14px 28px;
+                font-size: 30px;
+                cursor: pointer;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 3%;
+                border-radius: 5px;
+                font-family: 'Luckiest Guy', cursive;">RESTAURANT</ons-button><br>
+            <ons-button id="btnCus" onclick="btnCus()" style="display: block;
+                width: 100%;
+                border: none;
+                color: white;
+                background-color: #FF0000;
+                padding: 14px 28px;
+                font-size: 30px;
+                cursor: pointer;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 3%;
+                border-radius: 5px;
+                font-family: 'Luckiest Guy', cursive;">CUSTOMER</ons-button>
+        </ons-card>
+    </ons-page>
+
+    <script>
+        function btnRes(){
+            // window.location.href = "mapCustomer.html";
+        }
+        function btnCus(){
+            window.location.href = "mapCustomer.html";
+        }
+    </script>
+</body>
+
+</html>
